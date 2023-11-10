@@ -57,14 +57,21 @@ public class Client {
                 String[] trozos = txtoSms.split(" ", 3);
                 if (trozos[0].equalsIgnoreCase(".private")) {
                     String destino = trozos[1];
-//                    String privateMessage = trozos[2];
                     m = new Mensaje(nickName, txtoSms, destino);
 
                 } else if (trozos[0].equalsIgnoreCase(".channel")) {
                     String destino = trozos[1];
-//                    String channelMessage = trozos[2];
                     m = new Mensaje(nickName, txtoSms, destino);
-                } else {
+                    
+                } else if (trozos[0].equalsIgnoreCase(".listUsers")) {
+                   
+                    m = new Mensaje("", txtoSms);
+                    
+                }else if (trozos[0].equalsIgnoreCase(".help")) {
+                   
+                    m = new Mensaje("", txtoSms);
+                    
+                }else {
                     m = new Mensaje(nickName, txtoSms);
                 }
 //                m.getName();

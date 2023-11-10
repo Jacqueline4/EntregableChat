@@ -30,16 +30,12 @@ public class ReceptorClient extends Thread {
         try {
             do {
                 ois = new ObjectInputStream(this.s.getInputStream());
-                m = (Mensaje) ois.readObject();
-                if (m.getName().equalsIgnoreCase("")) {
-                    System.out.print(m.getSms() + "\n------>");
-
-                } else {
-                    System.out.print(m.getName() + ": " + m.getSms() + "\n");
-                }
+                m = (Mensaje) ois.readObject();              
+                    System.out.print(m.getName() +"--> " + m.getSms() + "\n"); //m.getName() + ": " +
+                
             } while (true);
         } catch (Exception ex) {
-//            System.out.println("Error al crear el ois del cliente receptor");
+           
         } finally {
             if (ois != null) {
                 try {

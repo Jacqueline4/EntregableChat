@@ -5,7 +5,7 @@
 package mensajes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
 
 /**
  *
@@ -15,7 +15,7 @@ public class Mensaje implements Serializable{
     private String name;
     private String sms;
     private String destinoName;
-    private ArrayList<String> tipo= new ArrayList<>();
+
     
 
     public Mensaje(String name, String sms) {
@@ -50,10 +50,5 @@ public class Mensaje implements Serializable{
         return destinoName;
     }
 
-    public ArrayList<String> getTipo() {
-        return tipo;
-    }
-
-   
     
 }

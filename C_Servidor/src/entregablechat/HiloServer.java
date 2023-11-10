@@ -59,22 +59,13 @@ public class HiloServer extends Thread {
             do {
                 try {
                     if (cliente != null) {
-//                        System.out.println(name+" isBound: "+cliente.isBound());
-//                        System.out.println(name+" isClosed: "+cliente.isClosed());
-//                        System.out.println(name+" isConnected: "+cliente.isConnected());
-//                        System.out.println(name+" isInputShutdown: "+cliente.isInputShutdown());
-//                        System.out.println(name+" hashCode: "+cliente.hashCode());
-//                        System.out.println(name+" getPort: "+cliente.getPort());
-//                        System.out.println(name+" getReceiveBufferSize: "+cliente.getReceiveBufferSize());
-//                        System.out.println(name+" getLocalPort: "+cliente.getLocalPort());
                         ois = new ObjectInputStream(cliente.getInputStream());
                     } else {
                         System.out.println("cliente es null");
                     }
 
                 } catch (IOException e) {
-//                    System.err.println(e);
-//                    System.err.println(name + "--  " + Arrays.toString(e.getStackTrace()) + " " + e.getMessage());
+                    System.err.println(e);
                 }
                 m = (Mensaje) ois.readObject();
 
@@ -83,41 +74,43 @@ public class HiloServer extends Thread {
                 if (mensaje.equalsIgnoreCase(".listUsers")) {
                     mensajeList = c.listUsers();
                     oos = new ObjectOutputStream(this.cliente.getOutputStream());
-                    m = new Mensaje(mensajeList, name);////en sms es name porque devuelve el listado de usuarios conectados
+                    m = new Mensaje(mensajeList, "");////en sms es name porque devuelve el listado de usuarios conectados
                     oos.writeObject(m);
+                    System.out.println(mensajeList);
                 } else if (mensaje.startsWith(".private")) {
                     String[] parts = mensaje.split(" ", 3);
                     if (parts.length >= 3) {
                         String destino = parts[1];
                         String privateMessage = parts[2];
                         privateMsg = new Mensaje(name, privateMessage, destino);
-//                        privateMsg.setName(destino);
                         c.enviarMensajePrivado(privateMsg);
                     }
                 } else if (mensaje.startsWith(".createChannel")) {
                     String[] parts = mensaje.split(" ", 2);
-
-                    String channelName = parts[1];
-                    c.createChannel(channelName, name);
+                    if (parts.length >= 2) {
+                        String channelName = parts[1];
+                        c.createChannel(channelName, name);
+                    }
                 } else if (mensaje.startsWith(".join")) {
                     String[] parts = mensaje.split(" ", 2);
-
-                    String channelName = parts[1];
-                    c.joinChannel(channelName, name);
-                } else if (mensaje.startsWith(".channel")) { 
+                    if (parts.length >= 2) {
+                        String channelName = parts[1];
+                        c.joinChannel(channelName, name);
+                    }
+                } else if (mensaje.startsWith(".channel")) {
                     String[] parts = mensaje.split(" ", 3);
                     if (parts.length >= 3) {
-                     String canalDestino = parts[1];
+                        String canalDestino = parts[1];
                         String privateMessage = parts[2];
                         privateMsg = new Mensaje(name, privateMessage, canalDestino);
                         c.enviarMensajeCanal(name, privateMsg, canalDestino);
                     }
                 } else if (mensaje.startsWith(".leave")) {
                     String[] parts = mensaje.split(" ", 2);
-
-                    String channelName = parts[1];
-                    c.leaveChannel(channelName, name);
-
+                    if (parts.length >= 2) {
+                        String channelName = parts[1];
+                        c.leaveChannel(channelName, name);
+                    }
                 } else if (mensaje.startsWith(".listChannels")) {
                     mensajeList = c.listChannels();
                     oos = new ObjectOutputStream(this.cliente.getOutputStream());
@@ -133,6 +126,7 @@ public class HiloServer extends Thread {
                     oos = new ObjectOutputStream(this.cliente.getOutputStream());
                     m = new Mensaje(mensajeList, "");////en sms es name porque devuelve el listado de usuarios conectados
                     oos.writeObject(m);
+                    System.out.println(mensajeList);
 
                 } else if (!mensaje.equals(".exit")) {
 //                    m.setName(this.name);// lo borraremos cuando ya sepamos su name
